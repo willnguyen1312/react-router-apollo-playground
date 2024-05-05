@@ -1,14 +1,39 @@
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import {
-  createBrowserRouter,
-  RouterProvider,
-  useLoaderData,
-} from "react-router-dom";
+  ApolloClient,
+  InMemoryCache,
+  ApolloProvider,
+  gql,
+  useQuery,
+} from "@apollo/client";
+
+const client = new ApolloClient({
+  uri: "https://spacex-production.up.railway.app/",
+  cache: new InMemoryCache(),
+});
+
+const GET_SPACEX_TOTAL_EMPLOYEES = gql`
+  query CEO {
+    company {
+      employees
+    }
+  }
+`;
+
+type DataResult = {
+  company: {
+    employees: number;
+  };
+};
 
 const loader = async () => {
-  const response = await fetch(
-    "https://jsonplaceholder.typicode.com/todos/1"
-  ).then((res) => res.json());
-  return { message: "Hello, world!", response };
+  const response = await client.query({
+    query: GET_SPACEX_TOTAL_EMPLOYEES,
+  });
+
+  return {
+    data: response.data as DataResult,
+  };
 };
 
 let router = createBrowserRouter([
@@ -20,14 +45,17 @@ let router = createBrowserRouter([
 ]);
 
 export default function App() {
-  return <RouterProvider router={router} fallbackElement={<p>Loading...</p>} />;
+  return (
+    <ApolloProvider client={client}>
+      <RouterProvider router={router} />
+    </ApolloProvider>
+  );
 }
 
 function Component() {
-  const data = useLoaderData() as Awaited<ReturnType<typeof loader>>;
-  console.log(data.response);
+  const { data } = useQuery<DataResult>(GET_SPACEX_TOTAL_EMPLOYEES);
 
-  return <h1>{data.message}</h1>;
+  return <h1>Total SpaceX employees: {data?.company.employees} 📡</h1>;
 }
 
 if (import.meta.hot) {
