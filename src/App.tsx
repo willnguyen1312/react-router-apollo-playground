@@ -34,7 +34,7 @@ type DataResult = {
 const loader = async () => {
   client.query({
     query: GET_SPACEX_TOTAL_EMPLOYEES,
-    fetchPolicy: "network-only",
+    fetchPolicy: "no-cache",
   });
 
   return null;
@@ -87,7 +87,7 @@ function Root() {
 
 function Home() {
   const { data, loading } = useQuery<DataResult>(GET_SPACEX_TOTAL_EMPLOYEES, {
-    fetchPolicy: "network-only",
+    fetchPolicy: "no-cache",
   });
   console.log("loading, ", loading);
 
