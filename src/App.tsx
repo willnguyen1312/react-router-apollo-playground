@@ -1,4 +1,9 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Outlet,
+  Link,
+} from "react-router-dom";
 import {
   ApolloClient,
   InMemoryCache,
@@ -27,20 +32,31 @@ type DataResult = {
 };
 
 const loader = async () => {
-  const response = await client.query({
+  client.query({
     query: GET_SPACEX_TOTAL_EMPLOYEES,
+    fetchPolicy: "network-only",
   });
 
-  return {
-    data: response.data as DataResult,
-  };
+  return null;
 };
 
 let router = createBrowserRouter([
   {
     path: "/",
-    loader,
-    Component,
+    Component: Root,
+    children: [
+      {
+        index: true,
+        loader,
+        Component: Home,
+      },
+      {
+        path: "about",
+        Component: () => {
+          return <div>About</div>;
+        },
+      },
+    ],
   },
 ]);
 
@@ -52,10 +68,32 @@ export default function App() {
   );
 }
 
-function Component() {
-  const { data } = useQuery<DataResult>(GET_SPACEX_TOTAL_EMPLOYEES);
+function Root() {
+  return (
+    <main>
+      <nav>
+        <ul>
+          <li>
+            <Link to="/">Home</Link>
+            <Link to="/about">About</Link>
+          </li>
+        </ul>
+      </nav>
 
-  return <h1>Total SpaceX employees: {data?.company.employees} 📡</h1>;
+      <Outlet />
+    </main>
+  );
+}
+
+function Home() {
+  const { data, loading } = useQuery<DataResult>(GET_SPACEX_TOTAL_EMPLOYEES, {
+    fetchPolicy: "network-only",
+  });
+  console.log("loading, ", loading);
+
+  return (
+    <h1>Total number of SpaceX 📡 employees: {data?.company.employees}</h1>
+  );
 }
 
 if (import.meta.hot) {
