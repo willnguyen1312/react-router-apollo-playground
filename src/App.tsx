@@ -85,7 +85,9 @@ function Root() {
 }
 
 function Home() {
-  const { data, loading } = useQuery<DataResult>(GET_SPACEX_TOTAL_EMPLOYEES);
+  const { data, loading } = useQuery<DataResult>(GET_SPACEX_TOTAL_EMPLOYEES, {
+    fetchPolicy: "network-only",
+  });
   console.log("loading: ", loading);
 
   return (
