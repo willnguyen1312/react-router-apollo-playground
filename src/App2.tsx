@@ -13,30 +13,23 @@ import {
 } from "@apollo/client";
 
 const client = new ApolloClient({
-  uri: "https://spacex-production.up.railway.app/",
+  uri: "http://localhost:5173",
   cache: new InMemoryCache(),
 });
 
-const GET_SPACEX_TOTAL_EMPLOYEES = gql`
-  query CEO {
-    company {
-      employees
-    }
+const GET_NUMBER_QUERY = gql`
+  query GetNumber {
+    value
   }
 `;
 
-type DataResult = {
-  company: {
-    employees: number;
-  };
-};
-
 const loader = async () => {
-  const result = await client.query({
-    query: GET_SPACEX_TOTAL_EMPLOYEES,
+  // Wait 100ms
+  await new Promise((resolve) => setTimeout(resolve, 100));
+  client.query({
+    query: GET_NUMBER_QUERY,
+    fetchPolicy: "network-only",
   });
-
-  console.log("result: ", result);
 
   return null;
 };
@@ -87,12 +80,14 @@ function Root() {
 }
 
 function Home() {
-  const { data } = useQuery<DataResult>(GET_SPACEX_TOTAL_EMPLOYEES, {
+  const { data } = useQuery(GET_NUMBER_QUERY, {
     fetchPolicy: "network-only",
   });
 
   return (
-    <h1>Total number of SpaceX 📡 employees: {data?.company.employees}</h1>
+    <div>
+      <p>Number: {data?.value}</p>
+    </div>
   );
 }
 
