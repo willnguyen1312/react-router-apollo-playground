@@ -26,10 +26,10 @@ const GET_NUMBER_QUERY = gql`
 const loader = async () => {
   // Wait 100ms
   await new Promise((resolve) => setTimeout(resolve, 100));
-  client.query({
-    query: GET_NUMBER_QUERY,
-    fetchPolicy: "network-only",
-  });
+  // client.query({
+  //   query: GET_NUMBER_QUERY,
+  //   fetchPolicy: "network-only",
+  // });
 
   return null;
 };
@@ -80,13 +80,22 @@ function Root() {
 }
 
 function Home() {
-  const { data } = useQuery(GET_NUMBER_QUERY, {
-    fetchPolicy: "network-only",
-  });
+  const { data, loading } = useQuery(GET_NUMBER_QUERY);
 
   return (
     <div>
       <p>Number: {data?.value}</p>
+      <button
+        onClick={() => {
+          client.query({
+            query: GET_NUMBER_QUERY,
+            fetchPolicy: "network-only",
+          });
+        }}
+      >
+        Refresh number
+      </button>
+      <p>{loading ? "Loading..." : null}</p>
     </div>
   );
 }

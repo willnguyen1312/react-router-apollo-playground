@@ -12,7 +12,7 @@ export const handlers = [
   // query
   graphql.query("GetNumber", async ({ query, variables }) => {
     // Wait 250ms
-    await new Promise((resolve) => setTimeout(resolve, 250));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     const { errors, data } = await executeGraphQL({
       schema,
       source: query,
