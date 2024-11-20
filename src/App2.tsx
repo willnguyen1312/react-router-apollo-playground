@@ -80,17 +80,21 @@ function Root() {
 }
 
 function Home() {
-  const { data, loading } = useQuery(GET_NUMBER_QUERY);
+  const { data, loading, refetch } = useQuery(GET_NUMBER_QUERY);
 
   return (
     <div>
       <p>Number: {data?.value}</p>
       <button
         onClick={() => {
-          client.query({
-            query: GET_NUMBER_QUERY,
-            fetchPolicy: "network-only",
-          });
+          // client.query({
+          //   query: GET_NUMBER_QUERY,
+          //   fetchPolicy: "network-only",
+          // });
+
+          // The above and below code are equivalent
+
+          refetch();
         }}
       >
         Refresh number
