@@ -80,7 +80,11 @@ function Root() {
 }
 
 function Home() {
-  const { data, loading, refetch } = useQuery(GET_NUMBER_QUERY);
+  const { data, loading, refetch, networkStatus } = useQuery(GET_NUMBER_QUERY, {
+    fetchPolicy: "network-only",
+  });
+
+  console.log("networkStatus", networkStatus);
 
   return (
     <div>
