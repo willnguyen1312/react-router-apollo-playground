@@ -3,6 +3,7 @@ import {
   RouterProvider,
   Outlet,
   Link,
+  useNavigate,
 } from "react-router-dom";
 import {
   ApolloClient,
@@ -26,10 +27,10 @@ const GET_NUMBER_QUERY = gql`
 const loader = async () => {
   // Wait 100ms
   await new Promise((resolve) => setTimeout(resolve, 100));
-  // client.query({
-  //   query: GET_NUMBER_QUERY,
-  //   fetchPolicy: "network-only",
-  // });
+  await client.query({
+    query: GET_NUMBER_QUERY,
+    fetchPolicy: "network-only",
+  });
 
   return null;
 };
@@ -79,12 +80,11 @@ function Root() {
   );
 }
 
-function Home() {
-  const { data, loading, refetch, networkStatus } = useQuery(GET_NUMBER_QUERY, {
-    fetchPolicy: "network-only",
-  });
+let time = 1;
 
-  console.log("networkStatus", networkStatus);
+function Home() {
+  const { data, loading, refetch } = useQuery(GET_NUMBER_QUERY);
+  const navigate = useNavigate();
 
   return (
     <div>
@@ -98,7 +98,9 @@ function Home() {
 
           // The above and below code are equivalent
 
-          refetch();
+          navigate(`/?time=${time++}`, { replace: true });
+
+          // refetch();
         }}
       >
         Refresh number
