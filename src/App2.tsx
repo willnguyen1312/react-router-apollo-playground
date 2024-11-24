@@ -4,6 +4,7 @@ import {
   Outlet,
   Link,
   useNavigate,
+  useRevalidator,
 } from "react-router-dom";
 import {
   ApolloClient,
@@ -85,6 +86,8 @@ let time = 1;
 function Home() {
   const { data, loading, refetch } = useQuery(GET_NUMBER_QUERY);
   const navigate = useNavigate();
+  const { state, revalidate } = useRevalidator();
+  console.log(state);
 
   return (
     <div>
@@ -98,7 +101,8 @@ function Home() {
 
           // The above and below code are equivalent
 
-          navigate(`/?time=${time++}`, { replace: true });
+          // navigate(`/?time=${time++}`, { replace: true });
+          revalidate();
 
           // refetch();
         }}
