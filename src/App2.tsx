@@ -12,6 +12,7 @@ import {
   ApolloProvider,
   gql,
   useQuery,
+  useMutation,
 } from "@apollo/client";
 
 const client = new ApolloClient({
@@ -22,6 +23,12 @@ const client = new ApolloClient({
 const GET_NUMBER_QUERY = gql`
   query GetNumber {
     value
+  }
+`;
+
+const HELLO_MUTATION = gql`
+  mutation Hello {
+    message
   }
 `;
 
@@ -85,9 +92,12 @@ let time = 1;
 
 function Home() {
   const { data, loading, refetch } = useQuery(GET_NUMBER_QUERY);
+  const [mutateHello] = useMutation(HELLO_MUTATION, {
+    errorPolicy: "all",
+  });
   const navigate = useNavigate();
   const { state, revalidate } = useRevalidator();
-  console.log(state);
+  // console.log(state);
 
   return (
     <div>
@@ -110,6 +120,14 @@ function Home() {
         Refresh number
       </button>
       <p>{loading ? "Loading..." : null}</p>
+      <button
+        onClick={async () => {
+          const data = await mutateHello();
+          console.log(data);
+        }}
+      >
+        Hello
+      </button>
     </div>
   );
 }

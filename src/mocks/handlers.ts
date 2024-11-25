@@ -24,4 +24,11 @@ export const handlers = [
 
     return HttpResponse.json({ errors, data });
   }),
+
+  // mutation
+  graphql.mutation("Hello", async () => {
+    // return HttpResponse.json({ errors: [], data: { message: "Hello" } });
+    // Return an error
+    return HttpResponse.json({ errors: [{ message: "Error" }], data: null });
+  }),
 ];
