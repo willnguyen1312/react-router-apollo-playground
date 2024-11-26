@@ -26,6 +26,12 @@ const GET_NUMBER_QUERY = gql`
   }
 `;
 
+const ERROR_QUERY = gql`
+  query Error {
+    value
+  }
+`;
+
 const HELLO_MUTATION = gql`
   mutation Hello {
     message
@@ -35,10 +41,18 @@ const HELLO_MUTATION = gql`
 const loader = async () => {
   // Wait 100ms
   await new Promise((resolve) => setTimeout(resolve, 100));
-  await client.query({
-    query: GET_NUMBER_QUERY,
-    fetchPolicy: "network-only",
-  });
+  await client
+    .query({
+      query: ERROR_QUERY,
+      fetchPolicy: "network-only",
+      errorPolicy: "all",
+    })
+    .then((data) => {
+      console.log(data.errors);
+    });
+  // .catch((error) => {
+  //   console.error(error);
+  // });
 
   return null;
 };
