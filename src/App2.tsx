@@ -13,12 +13,30 @@ import {
   gql,
   useQuery,
   useMutation,
+  ApolloLink,
+  HttpLink,
 } from "@apollo/client";
 import { useState } from "react";
+import { onError } from "@apollo/client/link/error";
+
+// Log any GraphQL errors or network error that occurred
+const errorLink = onError(({ graphQLErrors, networkError }) => {
+  if (graphQLErrors)
+    graphQLErrors.forEach(({ message, locations, path }) =>
+      console.log(
+        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+      )
+    );
+  if (networkError) console.log(`[Network error]: ${networkError}`);
+});
 
 const client = new ApolloClient({
-  uri: "http://localhost:5173",
+  // uri: "http://localhost:5173",
   cache: new InMemoryCache(),
+  link: ApolloLink.from([
+    errorLink,
+    new HttpLink({ uri: "http://localhost:5173" }),
+  ]),
 });
 
 const GET_NUMBER_QUERY = gql`
@@ -110,10 +128,17 @@ function Home() {
     skip: true,
   });
   const { data: errorData, error } = useQuery(ERROR_QUERY, {
-    errorPolicy: "ignore",
+    // errorPolicy: "",
   });
-  console.log({ errorData });
-  console.log(error?.graphQLErrors);
+
+  if (error?.networkError) {
+    debugger;
+  }
+
+  if (error?.graphQLErrors) {
+    debugger;
+  }
+
   const [value, setValue] = useState(0);
 
   const [mutateHello] = useMutation(HELLO_MUTATION, {
@@ -121,7 +146,6 @@ function Home() {
   });
   const navigate = useNavigate();
   const { state, revalidate } = useRevalidator();
-  // console.log(state);
 
   return (
     <div>
