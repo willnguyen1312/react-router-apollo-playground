@@ -14,6 +14,7 @@ import {
   useQuery,
   useMutation,
 } from "@apollo/client";
+import { useState } from "react";
 
 const client = new ApolloClient({
   uri: "http://localhost:5173",
@@ -41,15 +42,15 @@ const HELLO_MUTATION = gql`
 const loader = async () => {
   // Wait 100ms
   await new Promise((resolve) => setTimeout(resolve, 100));
-  await client
-    .query({
-      query: ERROR_QUERY,
-      fetchPolicy: "network-only",
-      errorPolicy: "all",
-    })
-    .then((data) => {
-      console.log(data.errors);
-    });
+  // await client
+  //   .query({
+  //     query: ERROR_QUERY,
+  //     fetchPolicy: "network-only",
+  //     errorPolicy: "all",
+  //   })
+  //   .then((data) => {
+  //     console.log(data.errors);
+  //   });
   // .catch((error) => {
   //   console.error(error);
   // });
@@ -105,7 +106,16 @@ function Root() {
 let time = 1;
 
 function Home() {
-  const { data, loading, refetch } = useQuery(GET_NUMBER_QUERY);
+  const { data, loading, refetch } = useQuery(GET_NUMBER_QUERY, {
+    skip: true,
+  });
+  const { data: errorData, error } = useQuery(ERROR_QUERY, {
+    errorPolicy: "ignore",
+  });
+  console.log({ errorData });
+  console.log(error?.graphQLErrors);
+  const [value, setValue] = useState(0);
+
   const [mutateHello] = useMutation(HELLO_MUTATION, {
     errorPolicy: "all",
   });
@@ -116,6 +126,7 @@ function Home() {
   return (
     <div>
       <p>Number: {data?.value}</p>
+      <button onClick={() => setValue(value + 1)}>Value: {value}</button>
       <button
         onClick={() => {
           // client.query({
