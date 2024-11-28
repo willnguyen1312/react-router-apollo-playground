@@ -73,6 +73,8 @@ const loader = async () => {
   //   console.error(error);
   // });
 
+  // throw new Error("Error nha 😎");
+
   return null;
 };
 
