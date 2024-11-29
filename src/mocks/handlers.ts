@@ -32,7 +32,7 @@ export const handlers = [
         // data: {
         //   value: "^o^",
         // },
-      }
+      },
       // { status: 500 }
     );
   }),
