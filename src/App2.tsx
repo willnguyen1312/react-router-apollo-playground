@@ -24,8 +24,8 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors)
     graphQLErrors.forEach(({ message, locations, path }) =>
       console.log(
-        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
-      ),
+        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+      )
     );
   if (networkError) console.log(`[Network error]: ${networkError}`);
 });
@@ -58,6 +58,7 @@ const HELLO_MUTATION = gql`
 `;
 
 const loader = async () => {
+  const data = await fetch("http://jsonplaceholder.typicode.com/comments/1");
   // Wait 100ms
   await new Promise((resolve) => setTimeout(resolve, 100));
   // await client
@@ -81,6 +82,10 @@ const loader = async () => {
 let router = createBrowserRouter([
   {
     path: "/",
+    loader: async () => {
+      const data = await fetch("http://jsonplaceholder.typicode.com/posts/1");
+      return data.json();
+    },
     Component: Root,
     children: [
       {
