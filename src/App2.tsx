@@ -88,7 +88,9 @@ function Root() {
 }
 
 function Home() {
-  const { data, loading } = useQuery(GET_NUMBER_QUERY);
+  const { data, loading } = useQuery(GET_NUMBER_QUERY, {
+    fetchPolicy: "cache-and-network",
+  });
   const client = useApolloClient();
 
   return (
@@ -104,7 +106,7 @@ function Home() {
       >
         Refresh number
       </button>
-      <p>{loading ? "Loading..." : null}</p>
+      <p>{!data ? "Loading..." : null}</p>
     </div>
   );
 }

@@ -18,7 +18,7 @@ export const handlers = [
       source: query,
       variableValues: variables,
       rootValue: {
-        value: value++,
+        value,
       },
     });
 
@@ -32,7 +32,7 @@ export const handlers = [
         // data: {
         //   value: "^o^",
         // },
-      },
+      }
       // { status: 500 }
     );
   }),
