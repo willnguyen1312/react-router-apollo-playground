@@ -12,6 +12,7 @@
   "dependencies": {
     "@apollo/client": "^3.12.9",
     "graphql": "^16.10.0",
+    "promise-status-async": "^1.2.10",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.1.5"
