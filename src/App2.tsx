@@ -4,8 +4,6 @@ import {
   Outlet,
   Link,
   useNavigate,
-  useRevalidator,
-  useRouteLoaderData,
 } from "react-router-dom";
 import {
   ApolloClient,
