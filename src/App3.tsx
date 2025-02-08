@@ -68,8 +68,10 @@ let router = createBrowserRouter([
       {
         index: true,
         loader,
-        action: async () => {
-          console.log("action");
+        action: async ({ request }) => {
+          const formData = await request.formData();
+          const message = formData.get("message");
+          console.log("action", message);
           return null;
         },
         Component: Home,
@@ -129,6 +131,19 @@ function Home() {
       <fetcher.Form method="post">
         <button type="submit">Refresh data</button>
       </fetcher.Form>
+
+      <button
+        onClick={() => {
+          fetcher.submit(
+            {
+              message: "Hello",
+            },
+            { method: "post" }
+          );
+        }}
+      >
+        Refresh data via submit
+      </button>
 
       <Suspense fallback={<div>Loading...</div>}>
         <Await resolve={nonCriticalData}>
