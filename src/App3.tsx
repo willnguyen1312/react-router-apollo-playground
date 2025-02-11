@@ -7,6 +7,7 @@ import {
   Await,
   useFetcher,
   useAsyncValue,
+  Form,
 } from "react-router-dom";
 import {
   ApolloClient,
@@ -121,16 +122,21 @@ function Home() {
   const { nonCriticalData, criticalData } = useLoaderData<typeof loader>();
   const fetcher = useFetcher();
 
-  getStatus(nonCriticalData).then((v) => console.log(v));
+  // getStatus(nonCriticalData).then((v) => console.log(v));
 
   return (
     <div>
       <h1>Streaming example</h1>
       <h2>Critical data value: {criticalData}</h2>
 
-      <fetcher.Form method="post">
+      {/* <fetcher.Form method="post">
         <button type="submit">Refresh data</button>
-      </fetcher.Form>
+      </fetcher.Form> */}
+
+      <Form method="post">
+        <input type="text" name="message" />
+        <button type="submit">Refresh data</button>
+      </Form>
 
       <button
         onClick={() => {
