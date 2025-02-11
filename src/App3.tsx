@@ -43,6 +43,7 @@ const client = new ApolloClient({
 let value = 0;
 
 const loader = async () => {
+  console.log("loader");
   const nonCriticalData = new Promise((res) =>
     setTimeout(() => res(value++), 3000)
   );
@@ -57,12 +58,12 @@ const loader = async () => {
 let router = createBrowserRouter([
   {
     path: "/",
-    loader: async () => {
-      const data = await fetch("http://jsonplaceholder.typicode.com/posts/1");
-      const result = await data.json();
-      console.log("finish loader");
-      return result;
-    },
+    // loader: async () => {
+    //   const data = await fetch("http://jsonplaceholder.typicode.com/posts/1");
+    //   const result = await data.json();
+    //   console.log("finish loader");
+    //   return result;
+    // },
     id: "root",
     Component: Root,
     children: [
@@ -70,8 +71,8 @@ let router = createBrowserRouter([
         index: true,
         loader,
         action: async ({ request }) => {
-          const formData = await request.json();
-          console.log("formData", formData);
+          // const formData = await request.json();
+          // console.log("formData", formData);
 
           console.log("finish action");
           return {
@@ -128,7 +129,7 @@ function Home() {
   console.log("render home");
 
   // getStatus(nonCriticalData).then((v) => console.log(v));
-  console.log("fetcher.data", fetcher.data);
+  // console.log("fetcher.data", fetcher.data);
   return (
     <div>
       <h1>Streaming example</h1>
@@ -145,18 +146,19 @@ function Home() {
 
       <button
         onClick={async () => {
-          await fetcher.submit(
-            {
-              message: "Hello",
-              object: {
-                name: "John",
-                age: 30,
-              },
-            },
-            { method: "post", encType: "application/json" }
-          );
+          // await fetcher.submit(
+          //   {
+          //     message: "Hello",
+          //     object: {
+          //       name: "John",
+          //       age: 30,
+          //     },
+          //   },
+          //   { method: "post", encType: "application/json" }
+          // );
 
-          console.log("after submit, ", fetcher.data);
+          // console.log("after submit, ", fetcher.data);
+          fetcher.submit(null, { method: "post" });
         }}
       >
         Refresh data via submit
