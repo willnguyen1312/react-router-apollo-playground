@@ -43,7 +43,6 @@ const client = new ApolloClient({
 let value = 0;
 
 const loader = async () => {
-  console.log("loader");
   const nonCriticalData = new Promise((res) =>
     setTimeout(() => res(value++), 3000)
   );
@@ -61,6 +60,7 @@ let router = createBrowserRouter([
     loader: async () => {
       const data = await fetch("http://jsonplaceholder.typicode.com/posts/1");
       const result = await data.json();
+      console.log("finish loader");
       return result;
     },
     id: "root",
@@ -70,10 +70,13 @@ let router = createBrowserRouter([
         index: true,
         loader,
         action: async ({ request }) => {
-          const formData = await request.formData();
-          const message = formData.get("message");
-          console.log("action", message);
-          return null;
+          const formData = await request.json();
+          console.log("formData", formData);
+
+          console.log("finish action");
+          return {
+            success: true,
+          };
         },
         Component: Home,
       },
@@ -122,8 +125,10 @@ function Home() {
   const { nonCriticalData, criticalData } = useLoaderData<typeof loader>();
   const fetcher = useFetcher();
 
-  // getStatus(nonCriticalData).then((v) => console.log(v));
+  console.log("render home");
 
+  // getStatus(nonCriticalData).then((v) => console.log(v));
+  console.log("fetcher.data", fetcher.data);
   return (
     <div>
       <h1>Streaming example</h1>
@@ -133,19 +138,25 @@ function Home() {
         <button type="submit">Refresh data</button>
       </fetcher.Form> */}
 
-      <Form method="post">
+      {/* <Form method="post">
         <input type="text" name="message" />
         <button type="submit">Refresh data</button>
-      </Form>
+      </Form> */}
 
       <button
-        onClick={() => {
-          fetcher.submit(
+        onClick={async () => {
+          await fetcher.submit(
             {
               message: "Hello",
+              object: {
+                name: "John",
+                age: 30,
+              },
             },
-            { method: "post" }
+            { method: "post", encType: "application/json" }
           );
+
+          console.log("after submit, ", fetcher.data);
         }}
       >
         Refresh data via submit
