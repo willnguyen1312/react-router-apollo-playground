@@ -79,6 +79,7 @@ let router = createBrowserRouter([
             success: true,
           };
         },
+        shouldRevalidate: () => false,
         Component: Home,
       },
       {
