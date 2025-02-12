@@ -8,6 +8,7 @@ import {
   useFetcher,
   useAsyncValue,
   Form,
+  useLocation,
 } from "react-router-dom";
 import {
   ApolloClient,
@@ -101,13 +102,20 @@ export default function App() {
 }
 
 function Root() {
+  const { state } = useLocation();
+  console.log("state", state);
+
   return (
     <main>
       <nav>
         <ul>
           <li>
-            <Link to="/">Home</Link>
-            <Link to="/about">About</Link>
+            <Link to="/" state={{ message: "Hello to home from about" }}>
+              Home
+            </Link>
+            <Link to="/about" state={{ message: "Hello to about from home" }}>
+              About
+            </Link>
           </li>
         </ul>
       </nav>
