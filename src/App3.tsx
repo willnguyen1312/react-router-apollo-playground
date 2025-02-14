@@ -86,8 +86,21 @@ let router = createBrowserRouter([
       {
         path: "about",
         Component: () => {
-          return <div>About</div>;
+          return (
+            <div>
+              <h1>About</h1>
+              <Outlet />
+            </div>
+          );
         },
+        children: [
+          {
+            path: "inside",
+            Component: () => {
+              return <div>About inside</div>;
+            },
+          },
+        ],
       },
     ],
   },
@@ -116,6 +129,7 @@ function Root() {
             <Link to="/about" state={{ message: "Hello to about from home" }}>
               About
             </Link>
+            <Link to="/about/inside">About inside</Link>
           </li>
         </ul>
       </nav>
