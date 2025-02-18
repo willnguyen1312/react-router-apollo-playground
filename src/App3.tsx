@@ -97,7 +97,23 @@ let router = createBrowserRouter([
           {
             path: "inside",
             Component: () => {
-              return <div>About inside</div>;
+              return (
+                <>
+                  <div
+                    style={{
+                      height: 1000,
+                    }}
+                  />
+                  <section
+                    id="anchor"
+                    style={{
+                      height: 1000,
+                    }}
+                  >
+                    Hola
+                  </section>
+                </>
+              );
             },
           },
         ],
@@ -129,7 +145,7 @@ function Root() {
             <Link to="/about" state={{ message: "Hello to about from home" }}>
               About
             </Link>
-            <Link to="/about/inside">About inside</Link>
+            <Link to="/about/inside#anchor">About inside</Link>
           </li>
         </ul>
       </nav>
