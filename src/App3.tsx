@@ -72,15 +72,11 @@ let router = createBrowserRouter([
         index: true,
         loader,
         action: async ({ request }) => {
-          // const formData = await request.json();
-          // console.log("formData", formData);
-
           console.log("finish action");
           return {
             success: true,
           };
         },
-        shouldRevalidate: () => false,
         Component: Home,
       },
       {
@@ -132,7 +128,6 @@ export default function App() {
 
 function Root() {
   const { state } = useLocation();
-  console.log("state", state);
 
   return (
     <main>
@@ -155,75 +150,22 @@ function Root() {
   );
 }
 
-async function getStatus(p: Promise<any>) {
-  const result = await promiseState(p);
-
-  return result;
-}
-
 function Home() {
-  const { nonCriticalData, criticalData } = useLoaderData<typeof loader>();
+  const { criticalData } = useLoaderData<typeof loader>();
   const fetcher = useFetcher();
 
   console.log("render home");
-
-  // getStatus(nonCriticalData).then((v) => console.log(v));
-  // console.log("fetcher.data", fetcher.data);
   return (
     <div>
-      <h1>Streaming example</h1>
-      <h2>Critical data value: {criticalData}</h2>
-
-      {/* <fetcher.Form method="post">
-        <button type="submit">Refresh data</button>
-      </fetcher.Form> */}
-
-      {/* <Form method="post">
-        <input type="text" name="message" />
-        <button type="submit">Refresh data</button>
-      </Form> */}
-
+      <h2>Data value: {criticalData}</h2>
       <button
         onClick={async () => {
-          // await fetcher.submit(
-          //   {
-          //     message: "Hello",
-          //     object: {
-          //       name: "John",
-          //       age: 30,
-          //     },
-          //   },
-          //   { method: "post", encType: "application/json" }
-          // );
-
-          // console.log("after submit, ", fetcher.data);
-          fetcher.submit(null, { method: "post" });
+          // fetcher.submit(null, { method: "post" });
+          fetcher.load("");
         }}
       >
-        Refresh data via submit
+        Update data via action
       </button>
-
-      <Suspense fallback={<div>Loading...</div>}>
-        <Await resolve={nonCriticalData}>
-          {(value) => (
-            <>
-              <h3>Non critical value: {value}</h3>
-              <LateComponent />
-            </>
-          )}
-        </Await>
-      </Suspense>
     </div>
   );
-}
-
-function LateComponent() {
-  const value = useAsyncValue() as number;
-  // const { nonCriticalData } = useLoaderData<typeof loader>();
-  // const value = use(nonCriticalData);
-  return <div>Late component: {value}</div>;
-}
-
-if (import.meta.hot) {
-  import.meta.hot.dispose(() => router.dispose());
 }
