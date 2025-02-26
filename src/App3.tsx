@@ -4,10 +4,7 @@ import {
   Outlet,
   Link,
   useLoaderData,
-  Await,
   useFetcher,
-  useAsyncValue,
-  Form,
   useLocation,
 } from "react-router-dom";
 import {
@@ -17,9 +14,7 @@ import {
   ApolloLink,
   HttpLink,
 } from "@apollo/client";
-import { Suspense, use } from "react";
 import { onError } from "@apollo/client/link/error";
-import { promiseState } from "promise-status-async";
 
 // Log any GraphQL errors or network error that occurred
 const errorLink = onError(({ graphQLErrors, networkError }) => {
@@ -72,7 +67,8 @@ let router = createBrowserRouter([
         index: true,
         loader,
         action: async ({ request }) => {
-          console.log("finish action");
+          const data = await request.json();
+          console.log("finish action", data);
           return {
             success: true,
           };
@@ -152,19 +148,38 @@ function Root() {
 
 function Home() {
   const { criticalData } = useLoaderData<typeof loader>();
-  const fetcher = useFetcher();
+  const fetcher1 = useFetcher();
+  const fetcher2 = useFetcher();
 
-  console.log("render home");
+  console.log("fetcher1", fetcher1.data);
+  console.log("fetcher2", fetcher2.data);
+
   return (
     <div>
       <h2>Data value: {criticalData}</h2>
       <button
         onClick={async () => {
-          // fetcher.submit(null, { method: "post" });
-          fetcher.load("");
+          fetcher1.submit(
+            {
+              intent: "update-action-1",
+            },
+            { method: "post", encType: "application/json" }
+          );
         }}
       >
-        Update data via action
+        Update data via action 1
+      </button>
+      <button
+        onClick={async () => {
+          fetcher2.submit(
+            {
+              intent: "update-action-2",
+            },
+            { method: "post", encType: "application/json" }
+          );
+        }}
+      >
+        Update data via action 2
       </button>
     </div>
   );
