@@ -15,6 +15,7 @@ import {
   HttpLink,
 } from "@apollo/client";
 import { onError } from "@apollo/client/link/error";
+import { useEffect, useState } from "react";
 
 // Log any GraphQL errors or network error that occurred
 const errorLink = onError(({ graphQLErrors, networkError }) => {
@@ -150,9 +151,10 @@ function Home() {
   const { criticalData } = useLoaderData<typeof loader>();
   const fetcher1 = useFetcher();
   const fetcher2 = useFetcher();
-
-  console.log("fetcher1", fetcher1.data);
-  console.log("fetcher2", fetcher2.data);
+  const [count, setCount] = useState(0);
+  useEffect(() => {
+    console.log("fetcher1", fetcher1.data);
+  }, [fetcher1.data]);
 
   return (
     <div>
@@ -180,6 +182,10 @@ function Home() {
         }}
       >
         Update data via action 2
+      </button>
+
+      <button onClick={() => setCount((prev) => prev + 1)}>
+        Value: {count}
       </button>
     </div>
   );
