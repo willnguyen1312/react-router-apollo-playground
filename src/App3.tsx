@@ -156,6 +156,10 @@ function Home() {
     console.log("fetcher1", fetcher1.data);
   }, [fetcher1.data]);
 
+  useEffect(() => {
+    console.log("fetcher2", fetcher2.data);
+  }, [fetcher2.data]);
+
   return (
     <div>
       <h2>Data value: {criticalData}</h2>
