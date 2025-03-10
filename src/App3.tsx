@@ -152,6 +152,7 @@ function Home() {
   const fetcher1 = useFetcher();
   const fetcher2 = useFetcher();
   const [count, setCount] = useState(0);
+
   useEffect(() => {
     console.log("fetcher1", fetcher1.data);
   }, [fetcher1.data]);
@@ -159,6 +160,9 @@ function Home() {
   useEffect(() => {
     console.log("fetcher2", fetcher2.data);
   }, [fetcher2.data]);
+
+  console.log("data 1", fetcher1.json);
+  console.log("data 2", fetcher2.json);
 
   return (
     <div>
