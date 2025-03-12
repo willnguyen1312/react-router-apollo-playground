@@ -6,6 +6,7 @@ import {
   useLoaderData,
   useFetcher,
   useLocation,
+  useSearchParams,
 } from "react-router-dom";
 import {
   ApolloClient,
@@ -152,6 +153,7 @@ function Home() {
   const fetcher1 = useFetcher();
   const fetcher2 = useFetcher();
   const [count, setCount] = useState(0);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
     console.log("fetcher1", fetcher1.data);
@@ -194,6 +196,11 @@ function Home() {
 
       <button onClick={() => setCount((prev) => prev + 1)}>
         Value: {count}
+      </button>
+
+      <h1>Search params: {searchParams.get("message")}</h1>
+      <button onClick={() => setSearchParams({ message: "Hi" })}>
+        Set search params
       </button>
     </div>
   );
