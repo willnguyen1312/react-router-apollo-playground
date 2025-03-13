@@ -4,20 +4,38 @@ import {
   createRoutesStub,
   useLoaderData,
 } from "react-router-dom";
-import { test, expect } from "vitest";
+import { test } from "vitest";
+import "vitest-dom/extend-expect";
 
 import { render, screen, waitFor } from "@testing-library/react";
 import user from "@testing-library/user-event";
 
-test("actions work", async () => {
+test("loaders work", async () => {
+  let RoutesStub = createRoutesStub([
+    {
+      path: "/",
+      HydrateFallback: () => null,
+      Component() {
+        let data = useLoaderData();
+        return <pre data-testid="data">Message: {data.message}</pre>;
+      },
+      loader() {
+        return Response.json({ message: "hello" });
+      },
+    },
+  ]);
+
+  render(<RoutesStub />);
+
+  await waitFor(() => screen.findByText("Message: hello"));
+});
+
+test.only("actions work", async () => {
   let RoutesStub = createRoutesStub([
     {
       path: "/",
       Component() {
-        let actionData = useActionData();
-        console.log("actionData: ", actionData);
-        let data = useLoaderData();
-        console.log("data: ", data);
+        let data = useActionData() as { message: string } | undefined;
         return (
           <Form method="post">
             <button type="submit">Submit</button>
@@ -25,21 +43,14 @@ test("actions work", async () => {
           </Form>
         );
       },
-      loader() {
-        return { message: "hello" };
-      },
       action() {
-        return { takada: "hello" };
+        return Response.json({ message: "hello" });
       },
     },
   ]);
 
   render(<RoutesStub />);
 
-  screen.debug();
-
-  //   user.click(screen.getByTestId("submit"));
-  //   const btn = screen.getByRole("button", { name: "Submit" });
-  //   user.click(btn);
-  //   await waitFor(() => screen.findByText("Message: hello"));
+  user.click(screen.getByText("Submit"));
+  await waitFor(() => screen.findByText("Message: hello"));
 });
