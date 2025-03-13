@@ -7,6 +7,8 @@ import {
   useFetcher,
   useLocation,
   useSearchParams,
+  replace,
+  redirect,
 } from "react-router-dom";
 import {
   ApolloClient,
@@ -72,6 +74,12 @@ let router = createBrowserRouter([
         index: true,
         loader,
         action: async ({ request }) => {
+          // throw new Response("Not found", { status: 404 });
+
+          const url = new URL(request.url);
+          url.pathname = "/about";
+          return replace(url.toString());
+
           const data = await request.json();
           await wait(waitTime);
           console.log("finish action", data);
@@ -118,6 +126,7 @@ let router = createBrowserRouter([
         ],
       },
     ],
+    errorElement: <div>Error Boundary</div>,
   },
 ]);
 
