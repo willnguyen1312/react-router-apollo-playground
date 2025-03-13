@@ -30,7 +30,7 @@ test("loaders work", async () => {
   await waitFor(() => screen.findByText("Message: hello"));
 });
 
-test.only("actions work", async () => {
+test("actions work", async () => {
   let RoutesStub = createRoutesStub([
     {
       path: "/",
