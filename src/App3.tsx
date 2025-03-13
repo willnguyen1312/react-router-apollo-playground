@@ -53,6 +53,9 @@ const loader = async () => {
   return { nonCriticalData, criticalData };
 };
 
+let waitTime = 5000;
+const wait = (ms: number) => new Promise((res) => setTimeout(res, ms));
+
 let router = createBrowserRouter([
   {
     path: "/",
@@ -70,7 +73,9 @@ let router = createBrowserRouter([
         loader,
         action: async ({ request }) => {
           const data = await request.json();
+          await wait(waitTime);
           console.log("finish action", data);
+          waitTime += 5000;
           return {
             success: true,
           };
@@ -155,16 +160,16 @@ function Home() {
   const [count, setCount] = useState(0);
   const [searchParams, setSearchParams] = useSearchParams();
 
-  useEffect(() => {
-    console.log("fetcher1", fetcher1.data);
-  }, [fetcher1.data]);
+  // useEffect(() => {
+  console.log("fetcher1", fetcher1.data);
+  // }, [fetcher1.data]);
 
-  useEffect(() => {
-    console.log("fetcher2", fetcher2.data);
-  }, [fetcher2.data]);
+  // useEffect(() => {
+  console.log("fetcher2", fetcher2.data);
+  // }, [fetcher2.data]);
 
-  console.log("data 1", fetcher1.json);
-  console.log("data 2", fetcher2.json);
+  // console.log("data 1", fetcher1.json);
+  // console.log("data 2", fetcher2.json);
 
   return (
     <div>
