@@ -3,6 +3,7 @@ import {
   useActionData,
   createRoutesStub,
   useLoaderData,
+  useParams,
 } from "react-router-dom";
 import { test } from "vitest";
 import "vitest-dom/extend-expect";
@@ -53,4 +54,32 @@ test("actions work", async () => {
 
   user.click(screen.getByText("Submit"));
   await waitFor(() => screen.findByText("Message: hello"));
+});
+
+test("params work", async () => {
+  let RoutesStub = createRoutesStub([
+    {
+      path: "/test/:id",
+      HydrateFallback: () => null,
+      Component() {
+        let params = useParams();
+        let data = useLoaderData();
+        return (
+          <pre data-testid="data">
+            Message: {data.message} {params.id}
+          </pre>
+        );
+      },
+      loader({ params, request, context }) {
+        // console.log(params);
+        // console.log(request.url);
+        // console.log(context);
+        return Response.json({ message: "hello" });
+      },
+    },
+  ]);
+
+  render(<RoutesStub initialEntries={["/test/123"]} />);
+
+  await waitFor(() => screen.findByText("Message: hello 123"));
 });
