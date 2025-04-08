@@ -52,6 +52,8 @@ const loader = async () => {
     setTimeout(() => res("critical"), 300)
   );
 
+  console.log("call me");
+
   return { nonCriticalData, criticalData };
 };
 
@@ -138,6 +140,8 @@ export default function App() {
   );
 }
 
+let countParams = 0;
+
 function Root() {
   const { state } = useLocation();
 
@@ -213,7 +217,16 @@ function Home() {
       </button>
 
       <h1>Search params: {searchParams.get("message")}</h1>
-      <button onClick={() => setSearchParams({ message: "Hi" })}>
+      <button
+        onClick={() =>
+          setSearchParams((searchParams) => {
+            searchParams.delete("count");
+            countParams++;
+            searchParams.set("count", countParams.toString());
+            return searchParams;
+          })
+        }
+      >
         Set search params
       </button>
     </div>
