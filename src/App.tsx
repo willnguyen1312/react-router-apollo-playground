@@ -3,6 +3,7 @@ import {
   RouterProvider,
   Outlet,
   Link,
+  useLoaderData,
 } from "react-router-dom";
 import {
   ApolloClient,
@@ -36,9 +37,9 @@ const loader = async () => {
     query: GET_SPACEX_TOTAL_EMPLOYEES,
   });
 
-  console.log("result: ", result);
-
-  return null;
+  return {
+    result,
+  };
 };
 
 let router = createBrowserRouter([
@@ -90,6 +91,8 @@ function Home() {
   const { data } = useQuery<DataResult>(GET_SPACEX_TOTAL_EMPLOYEES, {
     fetchPolicy: "network-only",
   });
+  const { result } = useLoaderData();
+  console.log("result: ", result);
 
   return (
     <h1>Total number of SpaceX 📡 employees: {data?.company.employees}</h1>

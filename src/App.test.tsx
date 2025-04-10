@@ -70,7 +70,7 @@ test("params work", async () => {
           </pre>
         );
       },
-      loader({ params, request, context }) {
+      loader() {
         // console.log(params);
         // console.log(request.url);
         // console.log(context);
