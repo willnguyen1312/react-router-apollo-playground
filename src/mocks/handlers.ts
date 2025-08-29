@@ -33,7 +33,7 @@ export const handlers = [
           // Partial data
           value: "Error value",
         },
-      }
+      },
       // { status: 500 }
     );
   }),

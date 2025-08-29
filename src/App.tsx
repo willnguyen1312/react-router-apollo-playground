@@ -91,13 +91,13 @@ function Home() {
   const { data, loading } = useQuery<DataResult>(GET_SPACEX_TOTAL_EMPLOYEES, {
     fetchPolicy: "network-only",
   });
-  const { result } = useLoaderData();
-  console.log("result: ", result);
 
-  if (loading) return <div>Loading...</div>;
+  console.log({ data, loading });
 
   return (
-    <h1>Total number of SpaceX 📡 employees: {data?.company.employees}</h1>
+    data && (
+      <h1>Total number of SpaceX 📡 employees: {data?.company.employees}</h1>
+    )
   );
 }
 

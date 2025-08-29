@@ -25,8 +25,8 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors)
     graphQLErrors.forEach(({ message, locations, path }) =>
       console.log(
-        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
-      )
+        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
+      ),
     );
   if (networkError) console.log(`[Network error]: ${networkError}`);
 });
@@ -45,11 +45,11 @@ let value = 0;
 const loader = async () => {
   console.log("loader");
   const nonCriticalData = new Promise((res) =>
-    setTimeout(() => res(value++), 3000)
+    setTimeout(() => res(value++), 3000),
   );
 
   const criticalData = await new Promise((res) =>
-    setTimeout(() => res("critical"), 300)
+    setTimeout(() => res("critical"), 300),
   );
 
   console.log("call me");
@@ -193,7 +193,7 @@ function Home() {
             {
               intent: "update-action-1",
             },
-            { method: "post", encType: "application/json" }
+            { method: "post", encType: "application/json" },
           );
         }}
       >
@@ -205,7 +205,7 @@ function Home() {
             {
               intent: "update-action-2",
             },
-            { method: "post", encType: "application/json" }
+            { method: "post", encType: "application/json" },
           );
         }}
       >
