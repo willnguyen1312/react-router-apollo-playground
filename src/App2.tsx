@@ -162,15 +162,13 @@ function Home() {
   // const { state, revalidate } = useRevalidator();
   const { data: errorData, error } = useQuery(ERROR_QUERY, {
     // errorPolicy: "ignore",
-    // errorPolicy: "all",
+    errorPolicy: "all",
     // errorPolicy: "none",
   });
 
   if (error) {
     console.log({ error, errorData });
   }
-
-  console.log({ errorData, error });
 
   return (
     <div>

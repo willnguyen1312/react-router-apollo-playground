@@ -30,6 +30,7 @@ export const handlers = [
       {
         errors: [{ message: "Error message" }],
         data: {
+          // Partial data
           value: "Error value",
         },
       }
