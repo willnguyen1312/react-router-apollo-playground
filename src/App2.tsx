@@ -24,8 +24,8 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors)
     graphQLErrors.forEach(({ message, locations, path }) =>
       console.log(
-        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
-      ),
+        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+      )
     );
   if (networkError) console.log(`[Network error]: ${networkError}`);
 });
@@ -45,11 +45,11 @@ const GET_NUMBER_QUERY = gql`
   }
 `;
 
-// const ERROR_QUERY = gql`
-//   query Error {
-//     value
-//   }
-// `;
+const ERROR_QUERY = gql`
+  query Error {
+    value
+  }
+`;
 
 const HELLO_MUTATION = gql`
   mutation Hello {
@@ -158,8 +158,19 @@ function Home() {
   const [mutateHello] = useMutation(HELLO_MUTATION, {
     errorPolicy: "all",
   });
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   // const { state, revalidate } = useRevalidator();
+  const { data: errorData, error } = useQuery(ERROR_QUERY, {
+    // errorPolicy: "ignore",
+    // errorPolicy: "all",
+    // errorPolicy: "none",
+  });
+
+  if (error) {
+    console.log({ error, errorData });
+  }
+
+  console.log({ errorData, error });
 
   return (
     <div>

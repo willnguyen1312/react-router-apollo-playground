@@ -29,10 +29,10 @@ export const handlers = [
     return HttpResponse.json(
       {
         errors: [{ message: "Error message" }],
-        // data: {
-        //   value: "^o^",
-        // },
-      },
+        data: {
+          value: "Error value",
+        },
+      }
       // { status: 500 }
     );
   }),
