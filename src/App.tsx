@@ -1,9 +1,9 @@
+import { useEffect, useState } from "react";
 import {
   createBrowserRouter,
   RouterProvider,
   Outlet,
   Link,
-  useLoaderData,
 } from "react-router-dom";
 import {
   ApolloClient,
@@ -11,6 +11,7 @@ import {
   ApolloProvider,
   gql,
   useQuery,
+  ApolloError,
 } from "@apollo/client";
 
 const client = new ApolloClient({
@@ -88,16 +89,53 @@ function Root() {
 }
 
 function Home() {
-  const { data, loading } = useQuery<DataResult>(GET_SPACEX_TOTAL_EMPLOYEES, {
-    fetchPolicy: "network-only",
-  });
+  const [data, setData] = useState<DataResult | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  console.log({ data, loading });
+  useEffect(() => {
+    const abortController = new AbortController();
+
+    setLoading(true);
+    client
+      .query({
+        query: GET_SPACEX_TOTAL_EMPLOYEES,
+        fetchPolicy: "network-only",
+        context: {
+          fetchOptions: {
+            signal: abortController.signal,
+          },
+        },
+      })
+      .then((res) => {
+        console.log("Data fetched on mount:", res.data);
+        setData(res.data);
+      })
+      .catch((err) => {
+        if (err instanceof ApolloError) {
+          console.error("Apollo error:", err);
+          debugger;
+        } else {
+          console.error("Unknown error:", err);
+          debugger;
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+
+    return () => {
+      console.log("Home unmounted");
+      abortController.abort("Component unmounted, so aborting fetch request");
+    };
+  }, []);
 
   return (
-    data && (
-      <h1>Total number of SpaceX 📡 employees: {data?.company.employees}</h1>
-    )
+    <>
+      {loading && <p>Loading...</p>}
+      {data && (
+        <h1>Total number of SpaceX 📡 employees: {data?.company.employees}</h1>
+      )}
+    </>
   );
 }
 
