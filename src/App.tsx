@@ -10,7 +10,6 @@ import {
   InMemoryCache,
   ApolloProvider,
   gql,
-  useQuery,
   ApolloError,
 } from "@apollo/client";
 
