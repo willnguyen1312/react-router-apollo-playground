@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
   createBrowserRouter,
   RouterProvider,
@@ -33,12 +33,12 @@ type DataResult = {
 };
 
 const loader = async () => {
-  const result = await client.query({
-    query: GET_SPACEX_TOTAL_EMPLOYEES,
-  });
+  // const result = await client.query({
+  //   query: GET_SPACEX_TOTAL_EMPLOYEES,
+  // });
 
   return {
-    result,
+    // result,
   };
 };
 
@@ -89,49 +89,99 @@ function Root() {
 
 function Home() {
   const [data, setData] = useState<DataResult | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const abortControllerRef = useRef<AbortController | null>(
+    new AbortController(),
+  );
 
-  useEffect(() => {
-    const abortController = new AbortController();
+  // useEffect(() => {
+  //   console.log("Home mounted");
+  //   setLoading(true);
+  //   client
+  //     .query({
+  //       query: GET_SPACEX_TOTAL_EMPLOYEES,
+  //       fetchPolicy: "no-cache",
+  //       context: {
+  //         fetchOptions: {
+  //           signal: abortControllerRef.current?.signal,
+  //         },
+  //       },
+  //     })
+  //     .then((res) => {
+  //       console.log("Data fetched on mount:", res.data);
+  //       setData(res.data);
+  //     })
+  //     .catch((err) => {
+  //       if (err instanceof ApolloError) {
+  //         console.error("Apollo error:", err);
+  //       } else {
+  //         console.error("Unknown error:", err);
+  //       }
+  //     })
+  //     .finally(() => {
+  //       setLoading(false);
+  //     });
 
-    setLoading(true);
-    client
-      .query({
-        query: GET_SPACEX_TOTAL_EMPLOYEES,
-        fetchPolicy: "network-only",
-        context: {
-          fetchOptions: {
-            signal: abortController.signal,
-          },
-        },
-      })
-      .then((res) => {
-        console.log("Data fetched on mount:", res.data);
-        setData(res.data);
-      })
-      .catch((err) => {
-        if (err instanceof ApolloError) {
-          console.error("Apollo error:", err);
-        } else {
-          console.error("Unknown error:", err);
-        }
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+  //   setTimeout(() => {
+  //     console.log("Aborting fetch request after 250ms");
+  //     abortControllerRef.current?.abort();
+  //   }, 500);
 
-    return () => {
-      console.log("Home unmounted");
-      abortController.abort("Component unmounted, so aborting fetch request");
-    };
-  }, []);
+  //   return () => {
+  //     console.log("Home unmounted");
+  //     // abortController.abort("Component unmounted, so aborting fetch request");
+  //     // abortController.abort();
+  //   };
+  // }, []);
 
   return (
     <>
       {loading && <p>Loading...</p>}
-      {data && (
+      {!loading && data && (
         <h1>Total number of SpaceX 📡 employees: {data?.company.employees}</h1>
       )}
+
+      <button
+        onClick={() => {
+          setLoading(true);
+          setData(null);
+          client
+            .query({
+              query: GET_SPACEX_TOTAL_EMPLOYEES,
+              fetchPolicy: "network-only",
+              context: {
+                fetchOptions: {
+                  signal: abortControllerRef.current?.signal,
+                },
+              },
+            })
+            .then((res) => {
+              console.log("Data fetched on mount:", res.data);
+              setData(res.data);
+            })
+            .catch((err) => {
+              if (err instanceof ApolloError) {
+                console.error("Apollo error:", err);
+              } else {
+                console.error("Unknown error:", err);
+              }
+            })
+            .finally(() => {
+              setLoading(false);
+            });
+        }}
+      >
+        Fetch Data
+      </button>
+
+      <button
+        onClick={() => {
+          abortControllerRef.current?.abort();
+          abortControllerRef.current = new AbortController();
+        }}
+      >
+        Cancel
+      </button>
     </>
   );
 }
