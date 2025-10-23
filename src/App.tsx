@@ -91,7 +91,7 @@ function Home() {
   const [data, setData] = useState<DataResult | null>(null);
   const [loading, setLoading] = useState(false);
   const abortControllerRef = useRef<AbortController | null>(
-    new AbortController(),
+    new AbortController()
   );
 
   // useEffect(() => {
@@ -176,7 +176,7 @@ function Home() {
 
       <button
         onClick={() => {
-          abortControllerRef.current?.abort();
+          abortControllerRef.current?.abort("Good bye 👋");
           abortControllerRef.current = new AbortController();
         }}
       >
