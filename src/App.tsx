@@ -113,10 +113,8 @@ function Home() {
       .catch((err) => {
         if (err instanceof ApolloError) {
           console.error("Apollo error:", err);
-          debugger;
         } else {
           console.error("Unknown error:", err);
-          debugger;
         }
       })
       .finally(() => {
