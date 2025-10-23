@@ -11,6 +11,7 @@ import {
   ApolloProvider,
   gql,
   ApolloError,
+  useApolloClient,
 } from "@apollo/client";
 
 const client = new ApolloClient({
@@ -93,6 +94,7 @@ function Home() {
   const abortControllerRef = useRef<AbortController | null>(
     new AbortController()
   );
+  const client = useApolloClient();
 
   // useEffect(() => {
   //   console.log("Home mounted");
@@ -144,7 +146,7 @@ function Home() {
       <button
         onClick={() => {
           setLoading(true);
-          setData(null);
+          console.log("Fetching data on button click");
           client
             .query({
               query: GET_SPACEX_TOTAL_EMPLOYEES,
@@ -176,9 +178,7 @@ function Home() {
 
       <button
         onClick={() => {
-          abortControllerRef.current?.abort(
-            new Error("Fetch aborted by user 👋")
-          );
+          abortControllerRef.current?.abort();
           abortControllerRef.current = new AbortController();
         }}
       >
