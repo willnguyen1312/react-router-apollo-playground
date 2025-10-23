@@ -176,7 +176,9 @@ function Home() {
 
       <button
         onClick={() => {
-          abortControllerRef.current?.abort("Good bye 👋");
+          abortControllerRef.current?.abort(
+            new Error("Fetch aborted by user 👋")
+          );
           abortControllerRef.current = new AbortController();
         }}
       >
