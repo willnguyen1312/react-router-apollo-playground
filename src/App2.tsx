@@ -24,8 +24,8 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors)
     graphQLErrors.forEach(({ message, locations, path }) =>
       console.log(
-        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
-      ),
+        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+      )
     );
   if (networkError) console.log(`[Network error]: ${networkError}`);
 });
@@ -139,7 +139,7 @@ function Root() {
 
 function Home() {
   // const _data = useRouteLoaderData("root")
-  const { data, loading, refetch } = useQuery(GET_NUMBER_QUERY);
+  const { data, loading } = useQuery(GET_NUMBER_QUERY);
   const client = useApolloClient();
   // const { data: errorData, error } = useQuery(ERROR_QUERY, {
   // errorPolicy: "",
