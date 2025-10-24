@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useState, useRef } from "react";
 import {
   createBrowserRouter,
   RouterProvider,
@@ -12,6 +12,7 @@ import {
   gql,
   ApolloError,
   useApolloClient,
+  useQuery,
 } from "@apollo/client";
 
 const client = new ApolloClient({
@@ -55,13 +56,46 @@ let router = createBrowserRouter([
       },
       {
         path: "about",
-        Component: () => {
-          return <div>About</div>;
-        },
+        // Component: () => {
+        //   return <div>About</div>;
+        // },
+        Component: About,
       },
     ],
   },
 ]);
+
+function About() {
+  const { data, loading, error, startPolling, stopPolling } = useQuery(
+    GET_SPACEX_TOTAL_EMPLOYEES,
+    {
+      fetchPolicy: "cache-first",
+    }
+  );
+
+  return (
+    <>
+      <div>About</div>
+      <button
+        onClick={() => {
+          startPolling(1000);
+        }}
+      >
+        Start poll
+      </button>
+      <button
+        onClick={() => {
+          stopPolling();
+        }}
+      >
+        Stop poll
+      </button>
+      {data && <div>Total Employees: {data.company.employees}</div>}
+      {loading && <div>Loading...</div>}
+      {error && <div>Error: {error.message}</div>}
+    </>
+  );
+}
 
 export default function App() {
   return (
