@@ -30,7 +30,7 @@ test("App works with graphQL", async () => {
   render(
     <ApolloProvider client={client}>
       <Home />
-    </ApolloProvider>
+    </ApolloProvider>,
   );
 
   // Now you can assert on the spy
