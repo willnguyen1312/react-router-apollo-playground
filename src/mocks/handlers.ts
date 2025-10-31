@@ -11,18 +11,22 @@ let value = 0;
 export const handlers = [
   // query
   graphql.query("GetNumber", async ({ query, variables }) => {
-    // Wait 250ms
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    const { errors, data } = await executeGraphQL({
-      schema,
-      source: query,
-      variableValues: variables,
-      rootValue: {
-        value: value++,
+    // Wait 100ms
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    // const { errors, data } = await executeGraphQL({
+    //   schema,
+    //   source: query,
+    //   variableValues: variables,
+    //   rootValue: {
+    //     value: value++,
+    //   },
+    // });
+
+    return HttpResponse.json({
+      data: {
+        value: 42,
       },
     });
-
-    return HttpResponse.json({ errors, data });
   }),
 
   graphql.query("Error", () => {
@@ -33,7 +37,7 @@ export const handlers = [
           // Partial data
           value: "Error value",
         },
-      },
+      }
       // { status: 500 }
     );
   }),
