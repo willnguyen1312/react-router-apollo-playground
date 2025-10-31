@@ -34,13 +34,6 @@ export function Home() {
     <div>
       <p>Number: {data?.value}</p>
       <p>{loading ? "Loading..." : null}</p>
-      <button
-        onClick={async () => {
-          console.log(data);
-        }}
-      >
-        Hello
-      </button>
     </div>
   );
 }
