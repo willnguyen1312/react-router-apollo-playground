@@ -39,8 +39,14 @@ export const client = new ApolloClient({
   ]),
 });
 
-const GET_NUMBER_QUERY = gql`
+export const GET_NUMBER_QUERY = gql`
   query GetNumber {
+    value
+  }
+`;
+
+export const FETCH_NUMBER_QUERY = gql`
+  query FetchNumber {
     value
   }
 `;
