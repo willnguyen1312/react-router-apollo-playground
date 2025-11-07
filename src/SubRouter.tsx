@@ -1,7 +1,12 @@
-import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
+import {
+  createMemoryRouter,
+  createBrowserRouter,
+  RouterProvider,
+  Outlet,
+} from "react-router-dom";
 
 // Separate router for admin section
-const adminRouter = createBrowserRouter([
+const adminRouter = createMemoryRouter([
   {
     path: "/",
     Component: () => {
