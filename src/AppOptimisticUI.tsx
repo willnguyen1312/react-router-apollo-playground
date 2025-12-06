@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   createBrowserRouter,
   RouterProvider,
@@ -37,6 +38,7 @@ const action: ActionFunction = async ({ request }) => {
 
   await sleep(1000);
   return {
+    success: true,
     data: {
       list: db.list,
     },
@@ -75,17 +77,29 @@ function Root() {
 function Home() {
   const { data } = useLoaderData();
   const fetcher = useFetcher({ key: "item-1" });
-  // const fetchers = useFetchers();
+  const [value, setValue] = useState(0);
 
   const isFavorite = fetcher.json
     ? (fetcher.json as any).id === 1 && (fetcher.json as any).isFavorite
     : data.list[0].isFavorite;
 
-  // console.log("Fetchers:", fetchers);
+  console.log("Fetcher data", fetcher.data);
+
+  if (fetcher.state === "idle" && fetcher.data?.success) {
+    console.log("calling another action");
+    fetcher.reset();
+  }
 
   return (
     <div>
       <h1>Home</h1>
+      <button
+        onClick={() => {
+          setValue(value + 1);
+        }}
+      >
+        Increment {value}
+      </button>
 
       <div
         style={{
@@ -94,7 +108,7 @@ function Home() {
       >
         <span>Edit item 1</span>
         <button
-          onClick={() => {
+          onClick={async () => {
             fetcher.submit(
               {
                 intent: "toggle-favorite",
@@ -104,7 +118,7 @@ function Home() {
               {
                 method: "post",
                 encType: "application/json",
-              }
+              },
             );
           }}
         >
@@ -147,7 +161,7 @@ const ItemRenderer = ({ item }: { item: any }) => {
             {
               method: "post",
               encType: "application/json",
-            }
+            },
           );
         }}
       >

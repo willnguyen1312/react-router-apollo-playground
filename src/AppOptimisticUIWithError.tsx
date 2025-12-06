@@ -112,7 +112,7 @@ const ItemRenderer = ({ item }: { item: any }) => {
             {
               method: "post",
               encType: "application/json",
-            }
+            },
           );
         }}
       >
