@@ -36,7 +36,7 @@ const action: ActionFunction = async ({ request }) => {
     return item;
   });
 
-  await sleep(1000);
+  await sleep(3000);
   return {
     success: true,
     data: {
@@ -85,10 +85,10 @@ function Home() {
 
   console.log("Fetcher data", fetcher.data);
 
-  if (fetcher.state === "idle" && fetcher.data?.success) {
-    console.log("calling another action");
-    fetcher.reset();
-  }
+  // if (fetcher.state === "idle" && fetcher.data?.success) {
+  //   console.log("calling another action");
+  //   fetcher.reset();
+  // }
 
   return (
     <div>
@@ -109,7 +109,7 @@ function Home() {
         <span>Edit item 1</span>
         <button
           onClick={async () => {
-            fetcher.submit(
+            await fetcher.submit(
               {
                 intent: "toggle-favorite",
                 id: 1,
@@ -118,8 +118,10 @@ function Home() {
               {
                 method: "post",
                 encType: "application/json",
-              },
+              }
             );
+
+            console.log("Submitted toggle favorite for item 1");
           }}
         >
           {isFavorite ? "Unfavorite" : "Favorite"}
@@ -161,7 +163,7 @@ const ItemRenderer = ({ item }: { item: any }) => {
             {
               method: "post",
               encType: "application/json",
-            },
+            }
           );
         }}
       >
