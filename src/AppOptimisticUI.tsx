@@ -85,10 +85,9 @@ function Home() {
 
   console.log("Fetcher data", fetcher.data);
 
-  console.log(fetcher.json);
-  if (fetcher.state === "idle" && fetcher.data?.success) {
+  if (fetcher.state === "idle" && fetcher.data) {
     console.log("calling another action");
-    fetcher.reset();
+    queueMicrotask(fetcher.reset);
   }
 
   return (
