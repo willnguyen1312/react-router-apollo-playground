@@ -58,6 +58,23 @@ const router = createBrowserRouter([
         action,
         Component: Home,
       },
+      {
+        path: "home",
+        loader,
+        action,
+        Component: Home,
+      },
+      {
+        path: "cool",
+        loader: async () => {
+          console.log("Cool loader called");
+          return {
+            data: {
+              message: "This is a cool page!",
+            },
+          };
+        },
+      },
     ],
   },
 ]);
@@ -109,6 +126,7 @@ function Home() {
         <span>Edit item 1</span>
         <button
           onClick={async () => {
+            // fetcher.load("/cool");
             await fetcher.submit(
               {
                 intent: "toggle-favorite",
