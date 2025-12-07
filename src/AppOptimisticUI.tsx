@@ -76,7 +76,7 @@ function Root() {
 
 function Home() {
   const { data } = useLoaderData();
-  const fetcher = useFetcher({ key: "item-1" });
+  const fetcher = useKeyFetcher(`item-1`);
   const [value, setValue] = useState(0);
 
   const isFavorite = fetcher.json
@@ -85,10 +85,11 @@ function Home() {
 
   console.log("Fetcher data", fetcher.data);
 
-  // if (fetcher.state === "idle" && fetcher.data?.success) {
-  //   console.log("calling another action");
-  //   fetcher.reset();
-  // }
+  console.log(fetcher.json);
+  if (fetcher.state === "idle" && fetcher.data?.success) {
+    console.log("calling another action");
+    fetcher.reset();
+  }
 
   return (
     <div>
@@ -143,8 +144,13 @@ function Home() {
   );
 }
 
+const useKeyFetcher = (key: string) => {
+  const fetcher = useFetcher({ key });
+  return fetcher;
+};
+
 const ItemRenderer = ({ item }: { item: any }) => {
-  const fetcher = useFetcher({ key: `item-${item.id}` });
+  const fetcher = useKeyFetcher(`item-${item.id}`);
   const isFavorite = fetcher.json
     ? (fetcher.json as any).id === item.id && (fetcher.json as any).isFavorite
     : item.isFavorite;
