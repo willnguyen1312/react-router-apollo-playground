@@ -100,6 +100,7 @@ function Home() {
     "fetchers ",
     fetchers.map((f) => ({
       key: f.key,
+      data: f.json,
     }))
   );
 
