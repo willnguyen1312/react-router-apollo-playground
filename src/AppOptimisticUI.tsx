@@ -95,6 +95,13 @@ function Home() {
   const { data } = useLoaderData();
   const fetcher = useKeyFetcher(`item-1`);
   const [value, setValue] = useState(0);
+  const fetchers = useFetchers();
+  console.log(
+    "fetchers ",
+    fetchers.map((f) => ({
+      key: f.key,
+    }))
+  );
 
   const isFavorite = fetcher.json
     ? (fetcher.json as any).id === 1 && (fetcher.json as any).isFavorite
