@@ -1,4 +1,4 @@
-import { Suspense, useState } from "react";
+import { Suspense, use, useState } from "react";
 import { faker } from "@faker-js/faker";
 import {
   createBrowserRouter,
@@ -125,9 +125,10 @@ function Home() {
     <div>
       <h1>Home</h1>
       <Suspense fallback={<div>Loading slow data</div>}>
-        <Await resolve={data.slowData}>
+        {/* <Await resolve={data.slowData}>
           {(slowData) => <div>Slow data: {slowData}</div>}
-        </Await>
+        </Await> */}
+        <SlowDataDisplay slowData={data.slowData} />
       </Suspense>
       <button
         onClick={() => {
@@ -179,6 +180,14 @@ function Home() {
     </div>
   );
 }
+
+const SlowDataDisplay = ({ slowData }: { slowData: any }) => {
+  console.log("Rendering SlowDataDisplay", slowData);
+  const value = use(slowData) as string;
+  const isLoading = slowData.status;
+  console.log("isLoading", isLoading);
+  return <div>Non critical value {value}</div>;
+};
 
 const useKeyFetcher = (key: string) => {
   const fetcher = useFetcher({ key });
