@@ -103,6 +103,7 @@ function Home() {
   const lazyLoaderFetcher = useFetcher({ key: "lazy-loader" });
 
   console.log("lazyLoader", lazyLoaderFetcher);
+  console.log("fetcher", fetcher.state);
 
   const isFavorite = fetcher.json
     ? (fetcher.json as any).id === 1 && (fetcher.json as any).isFavorite
@@ -140,6 +141,7 @@ function Home() {
                 encType: "application/json",
               }
             );
+            console.log("Submitted toggle favorite for item 1");
           }}
         >
           {isFavorite ? "Unfavorite" : "Favorite"}
