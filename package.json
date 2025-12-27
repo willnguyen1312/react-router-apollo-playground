@@ -13,6 +13,7 @@
   "dependencies": {
     "@apollo/client": "^3.12.9",
     "@faker-js/faker": "^10.1.0",
+    "@preact/signals-react": "^3.6.1",
     "@testing-library/react": "^16.2.0",
     "@testing-library/user-event": "^14.6.1",
     "graphql": "^16.10.0",
@@ -24,6 +25,7 @@
     "vitest-dom": "^0.1.1"
   },
   "devDependencies": {
+    "@preact/signals-react-transform": "^0.6.0",
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",
     "@typescript-eslint/eslint-plugin": "^8.23.0",

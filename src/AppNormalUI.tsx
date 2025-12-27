@@ -139,7 +139,7 @@ function Home() {
               {
                 method: "post",
                 encType: "application/json",
-              }
+              },
             );
             console.log("Submitted toggle favorite for item 1");
           }}
@@ -188,7 +188,7 @@ const ItemRenderer = ({ item }: { item: any }) => {
             {
               method: "post",
               encType: "application/json",
-            }
+            },
           );
         }}
       >

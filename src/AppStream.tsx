@@ -104,7 +104,7 @@ function Home() {
     fetchers.map((f) => ({
       key: f.key,
       data: f.json,
-    }))
+    })),
   );
 
   const isFavorite = fetcher.json
@@ -156,7 +156,7 @@ function Home() {
               {
                 method: "post",
                 encType: "application/json",
-              }
+              },
             );
 
             console.log("Submitted toggle favorite for item 1");
@@ -214,7 +214,7 @@ const ItemRenderer = ({ item }: { item: any }) => {
             {
               method: "post",
               encType: "application/json",
-            }
+            },
           );
         }}
       >
