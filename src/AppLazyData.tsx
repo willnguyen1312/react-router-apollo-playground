@@ -82,9 +82,29 @@ function Home() {
       </button>
 
       <ChildComponent />
+
+      <StandAloneComponent />
     </>
   );
 }
+
+const StandAloneComponent = () => {
+  const fetcher = useFetcher();
+  const isLoading = fetcher.state === "loading";
+
+  return (
+    <div>
+      <h4>Form Component</h4>
+      <fetcher.Form action="lazy-data">
+        <input name="query" />
+        {isLoading && <p>Loading...</p>}
+        {fetcher.data?.data && !isLoading && (
+          <p>[StandAlone Component] Message: {fetcher.data.data}</p>
+        )}
+      </fetcher.Form>
+    </div>
+  );
+};
 
 function ChildComponent() {
   const { getEmployees, loading, data } = useEmployeesData({
