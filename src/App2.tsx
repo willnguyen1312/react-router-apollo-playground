@@ -16,7 +16,7 @@ import {
   HttpLink,
   useApolloClient,
 } from "@apollo/client";
-import { useState } from "react";
+import { use, useState } from "react";
 import { onError } from "@apollo/client/link/error";
 
 // Log any GraphQL errors or network error that occurred
@@ -139,7 +139,12 @@ function Root() {
 
 function Home() {
   // const _data = useRouteLoaderData("root")
-  const { data, loading, refetch } = useQuery(GET_NUMBER_QUERY);
+  const { data, loading, refetch, startPolling, stopPolling } = useQuery(
+    GET_NUMBER_QUERY,
+    {
+      fetchPolicy: "cache-and-network",
+    },
+  );
   const client = useApolloClient();
   // const { data: errorData, error } = useQuery(ERROR_QUERY, {
   // errorPolicy: "",
@@ -176,20 +181,33 @@ function Home() {
       <button onClick={() => setValue(value + 1)}>Value: {value}</button>
       <button
         onClick={() => {
-          client.query({
-            query: GET_NUMBER_QUERY,
-            fetchPolicy: "network-only",
-          });
+          // client.query({
+          //   query: GET_NUMBER_QUERY,
+          //   fetchPolicy: "network-only",
+          // });
 
           // The above and below code are equivalent
 
           // navigate(`/?time=${time++}`, { replace: true });
           // revalidate();
 
-          // refetch();
+          refetch();
+          // startPolling(1000);
+          // client.query({
+          //   query: GET_NUMBER_QUERY,
+          //   fetchPolicy: "network-only",
+          // });
         }}
       >
-        Refresh number
+        Start polling
+      </button>
+
+      <button
+        onClick={() => {
+          stopPolling();
+        }}
+      >
+        Stop polling
       </button>
       <p>{loading ? "Loading..." : null}</p>
       <button

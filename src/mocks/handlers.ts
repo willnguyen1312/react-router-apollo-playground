@@ -22,9 +22,12 @@ export const handlers = [
     //   },
     // });
 
+    // Sleep 1s
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
     return HttpResponse.json({
       data: {
-        value: 42,
+        value: value++,
       },
     });
   }),
