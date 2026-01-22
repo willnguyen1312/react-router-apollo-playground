@@ -29,7 +29,7 @@ export const handlers = [
       data: {
         value: value++,
       },
-      errors: [{ message: "Error message" }],
+      // errors: [{ message: "Error message" }],
     });
   }),
 

@@ -97,18 +97,24 @@ const loader = async () => {
   return null;
 };
 
-
 const About = () => {
-  const { data, loading, refetch, startPolling, stopPolling, error: errorQuery } = useQuery(
-    GET_SPACEX_TOTAL_EMPLOYEES,
-    {
-      fetchPolicy: "cache-and-network",
-    },
+  const {
+    data,
+    loading,
+    refetch,
+    startPolling,
+    stopPolling,
+    error: errorQuery,
+  } = useQuery(GET_NUMBER_QUERY, {
+    fetchPolicy: "cache-and-network",
+  });
+
+  return (
+    <div>
+      <div>About: {data?.value}</div>
+      {loading && <div>Loading...</div>}
+    </div>
   );
-
-  console.log("errorQuery", errorQuery);
-
-  return <div>About</div>;
 };
 
 let router = createBrowserRouter([
@@ -134,7 +140,6 @@ let router = createBrowserRouter([
     ],
   },
 ]);
-
 
 export default function App() {
   return (
@@ -200,7 +205,7 @@ function Home() {
   if (error) {
     // fetch("https://jsonplaceholder.typicode.com/comments");
     // throw error;
-    console.log({ error, errorData });
+    // console.log({ error, errorData });
   }
 
   return (
@@ -254,7 +259,7 @@ function Home() {
             fetchPolicy: "no-cache",
             errorPolicy: "all",
           });
-          
+
           watchQuery.subscribe({
             error: (error) => {
               console.log("error");
@@ -270,7 +275,7 @@ function Home() {
             start: () => {
               console.log("start");
             },
-          })
+          });
         }}
       >
         Watch query
