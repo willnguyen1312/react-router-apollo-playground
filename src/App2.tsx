@@ -97,6 +97,20 @@ const loader = async () => {
   return null;
 };
 
+
+const About = () => {
+  const { data, loading, refetch, startPolling, stopPolling, error: errorQuery } = useQuery(
+    GET_SPACEX_TOTAL_EMPLOYEES,
+    {
+      fetchPolicy: "cache-and-network",
+    },
+  );
+
+  console.log("errorQuery", errorQuery);
+
+  return <div>About</div>;
+};
+
 let router = createBrowserRouter([
   {
     path: "/",
@@ -115,13 +129,12 @@ let router = createBrowserRouter([
       },
       {
         path: "about",
-        Component: () => {
-          return <div>About</div>;
-        },
+        Component: About,
       },
     ],
   },
 ]);
+
 
 export default function App() {
   return (
@@ -234,23 +247,19 @@ function Home() {
 
       <button
         onClick={() => {
-          // const watchQuery = client.watchQuery({
-          //   query: GET_NUMBER_QUERY,
-          //   fetchPolicy: "no-cache",
-          //   errorPolicy: "all",
-          // });
-
-          const watchQuery = spaceXClient.watchQuery({
-            query: GET_SPACEX_TOTAL_EMPLOYEES,
+          const watchQuery = client.watchQuery({
+            query: GET_NUMBER_QUERY,
             fetchPolicy: "no-cache",
             errorPolicy: "all",
           });
           
           watchQuery.subscribe({
             error: (error) => {
+              console.log("error");
               console.log(error);
             },
             next: (result) => {
+              console.log("next");
               console.log(result);
             },
             complete: () => {
