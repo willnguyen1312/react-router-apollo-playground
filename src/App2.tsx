@@ -176,6 +176,11 @@ function Home() {
       fetchPolicy: "cache-and-network",
     },
   );
+
+  console.log({
+    loading,
+    data
+  })
   const client = useApolloClient();
   // const { data: errorData, error } = useQuery(ERROR_QUERY, {
   // errorPolicy: "",
@@ -224,7 +229,7 @@ function Home() {
           // navigate(`/?time=${time++}`, { replace: true });
           // revalidate();
 
-          refetch();
+          // refetch();
           // startPolling(1000);
           // client.query({
           //   query: GET_NUMBER_QUERY,
@@ -232,7 +237,7 @@ function Home() {
           // });
         }}
       >
-        Start polling
+        Get number
       </button>
 
       <button
