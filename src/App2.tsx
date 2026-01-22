@@ -198,6 +198,8 @@ function Home() {
   });
 
   if (error) {
+    // fetch("https://jsonplaceholder.typicode.com/comments");
+    // throw error;
     console.log({ error, errorData });
   }
 
