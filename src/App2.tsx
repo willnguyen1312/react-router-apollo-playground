@@ -30,6 +30,19 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (networkError) console.log(`[Network error]: ${networkError}`);
 });
 
+const spaceXClient = new ApolloClient({
+  uri: "https://spacex-production.up.railway.app/",
+  cache: new InMemoryCache(),
+});
+
+const GET_SPACEX_TOTAL_EMPLOYEES = gql`
+  query CEO {
+    company {
+      employees
+    }
+  }
+`;
+
 const client = new ApolloClient({
   // uri: "http://localhost:5173",
   cache: new InMemoryCache(),
@@ -181,10 +194,10 @@ function Home() {
       <button onClick={() => setValue(value + 1)}>Value: {value}</button>
       <button
         onClick={() => {
-          // client.query({
-          //   query: GET_NUMBER_QUERY,
-          //   fetchPolicy: "network-only",
-          // });
+          client.query({
+            query: GET_NUMBER_QUERY,
+            fetchPolicy: "network-only",
+          });
 
           // The above and below code are equivalent
 
@@ -217,6 +230,39 @@ function Home() {
         }}
       >
         Hello
+      </button>
+
+      <button
+        onClick={() => {
+          // const watchQuery = client.watchQuery({
+          //   query: GET_NUMBER_QUERY,
+          //   fetchPolicy: "no-cache",
+          //   errorPolicy: "all",
+          // });
+
+          const watchQuery = spaceXClient.watchQuery({
+            query: GET_SPACEX_TOTAL_EMPLOYEES,
+            fetchPolicy: "no-cache",
+            errorPolicy: "all",
+          });
+          
+          watchQuery.subscribe({
+            error: (error) => {
+              console.log(error);
+            },
+            next: (result) => {
+              console.log(result);
+            },
+            complete: () => {
+              console.log("complete");
+            },
+            start: () => {
+              console.log("start");
+            },
+          })
+        }}
+      >
+        Watch query
       </button>
     </div>
   );
