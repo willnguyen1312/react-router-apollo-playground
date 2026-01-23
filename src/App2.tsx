@@ -15,6 +15,7 @@ import {
   ApolloLink,
   HttpLink,
   useApolloClient,
+  NetworkStatus,
 } from "@apollo/client";
 import { use, useState } from "react";
 import { onError } from "@apollo/client/link/error";
@@ -170,17 +171,19 @@ function Root() {
 
 function Home() {
   // const _data = useRouteLoaderData("root")
-  const { data, loading, refetch, startPolling, stopPolling } = useQuery(
+  const { data, loading, refetch, startPolling, stopPolling, networkStatus } = useQuery(
     GET_NUMBER_QUERY,
     {
       fetchPolicy: "cache-and-network",
+      notifyOnNetworkStatusChange: true,
     },
   );
 
-  console.log({
-    loading,
-    data
-  })
+  // console.log({
+  //   loading,
+  //   data,
+  //   networkStatus
+  // })
   const client = useApolloClient();
   // const { data: errorData, error } = useQuery(ERROR_QUERY, {
   // errorPolicy: "",
@@ -201,17 +204,17 @@ function Home() {
   });
   // const navigate = useNavigate();
   // const { state, revalidate } = useRevalidator();
-  const { data: errorData, error } = useQuery(ERROR_QUERY, {
-    // errorPolicy: "ignore",
-    errorPolicy: "all",
-    // errorPolicy: "none",
-  });
+  // const { data: errorData, error } = useQuery(ERROR_QUERY, {
+  //   // errorPolicy: "ignore",
+  //   errorPolicy: "all",
+  //   // errorPolicy: "none",
+  // });
 
-  if (error) {
-    // fetch("https://jsonplaceholder.typicode.com/comments");
-    // throw error;
-    // console.log({ error, errorData });
-  }
+  // if (error) {
+  // fetch("https://jsonplaceholder.typicode.com/comments");
+  // throw error;
+  // console.log({ error, errorData });
+  // }
 
   return (
     <div>
@@ -219,14 +222,15 @@ function Home() {
       <button onClick={() => setValue(value + 1)}>Value: {value}</button>
       <button
         onClick={() => {
-          client.query({
-            query: GET_NUMBER_QUERY,
-            fetchPolicy: "network-only",
-          });
+          // client.query({
+          //   query: GET_NUMBER_QUERY,
+          //   fetchPolicy: "network-only",
+          // });
 
+          // refetch();
           // The above and below code are equivalent
 
-          // navigate(`/?time=${time++}`, { replace: true });
+          // navigate(`/?time=${time++}`, {replace: true });
           // revalidate();
 
           // refetch();
@@ -261,7 +265,9 @@ function Home() {
         onClick={() => {
           const watchQuery = client.watchQuery({
             query: GET_NUMBER_QUERY,
-            fetchPolicy: "no-cache",
+            fetchPolicy: "cache-and-network",
+            // fetchPolicy: "network-only",
+            // fetchPolicy: "no-cache",
             errorPolicy: "all",
           });
 
@@ -285,7 +291,7 @@ function Home() {
       >
         Watch query
       </button>
-    </div>
+    </div >
   );
 }
 
