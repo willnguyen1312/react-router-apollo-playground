@@ -265,11 +265,13 @@ function Home() {
         onClick={() => {
           const watchQuery = client.watchQuery({
             query: GET_NUMBER_QUERY,
-            fetchPolicy: "cache-and-network",
-            // fetchPolicy: "network-only",
+            // fetchPolicy: "cache-and-network",
+            fetchPolicy: "network-only",
             // fetchPolicy: "no-cache",
             errorPolicy: "all",
           });
+
+          console.log("loading...")
 
           watchQuery.subscribe({
             error: (error) => {
