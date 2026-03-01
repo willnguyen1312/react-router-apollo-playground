@@ -71,6 +71,31 @@ const HELLO_MUTATION = gql`
   }
 `;
 
+const watchQuery = client.watchQuery({
+  query: GET_NUMBER_QUERY,
+  // fetchPolicy: "cache-and-network",
+  fetchPolicy: "cache-only",
+  // fetchPolicy: "no-cache",
+  errorPolicy: "all",
+});
+
+watchQuery.subscribe({
+  error: (error) => {
+    console.log("error");
+    console.log(error);
+  },
+  next: (result) => {
+    console.log("next");
+    console.log(result);
+  },
+  complete: () => {
+    console.log("complete");
+  },
+  start: () => {
+    console.log("start");
+  },
+});
+
 const loader = async () => {
   // const data = await fetch("http://jsonplaceholder.typicode.com/comments/1");
   // Wait 100ms
@@ -171,13 +196,11 @@ function Root() {
 
 function Home() {
   // const _data = useRouteLoaderData("root")
-  const { data, loading, refetch, startPolling, stopPolling, networkStatus } = useQuery(
-    GET_NUMBER_QUERY,
-    {
+  const { data, loading, refetch, startPolling, stopPolling, networkStatus } =
+    useQuery(GET_NUMBER_QUERY, {
       fetchPolicy: "cache-and-network",
       notifyOnNetworkStatusChange: true,
-    },
-  );
+    });
 
   // console.log({
   //   loading,
@@ -226,13 +249,10 @@ function Home() {
           //   query: GET_NUMBER_QUERY,
           //   fetchPolicy: "network-only",
           // });
-
           // refetch();
           // The above and below code are equivalent
-
           // navigate(`/?time=${time++}`, {replace: true });
           // revalidate();
-
           // refetch();
           // startPolling(1000);
           // client.query({
@@ -263,37 +283,14 @@ function Home() {
 
       <button
         onClick={() => {
-          const watchQuery = client.watchQuery({
-            query: GET_NUMBER_QUERY,
-            // fetchPolicy: "cache-and-network",
-            fetchPolicy: "network-only",
-            // fetchPolicy: "no-cache",
-            errorPolicy: "all",
-          });
-
-          console.log("loading...")
-
-          watchQuery.subscribe({
-            error: (error) => {
-              console.log("error");
-              console.log(error);
-            },
-            next: (result) => {
-              console.log("next");
-              console.log(result);
-            },
-            complete: () => {
-              console.log("complete");
-            },
-            start: () => {
-              console.log("start");
-            },
+          watchQuery.refetch().then((result) => {
+            console.log("refetch result:", result);
           });
         }}
       >
         Watch query
       </button>
-    </div >
+    </div>
   );
 }
 

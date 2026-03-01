@@ -13,6 +13,8 @@ import App from "./App2.tsx";
 // import App from "./AppStream.tsx";
 import { worker } from "./mocks/browser.ts";
 
-worker.start().then(() => {
+worker.start().then(async () => {
+  // Wait 1s
+  await new Promise((resolve) => setTimeout(resolve, 1000));
   ReactDOM.createRoot(document.getElementById("root")!).render(<App />);
 });
