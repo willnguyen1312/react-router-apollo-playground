@@ -1,7 +1,7 @@
 import { spawn } from "node:child_process";
 
 const procs = [
-  { name: "server", cmd: "node server.mjs" },
+  { name: "server", cmd: "node --watch server.mjs" },
   { name: "vite", cmd: "vite" },
 ].map(({ name, cmd }) => {
   const child = spawn(cmd, {

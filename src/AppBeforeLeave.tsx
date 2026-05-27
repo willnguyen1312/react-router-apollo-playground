@@ -1,9 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   createBrowserRouter,
   Link,
   Outlet,
   RouterProvider,
+  useBlocker,
 } from "react-router-dom";
 
 function fireLeaveRequest(from: string) {
@@ -47,7 +48,41 @@ function RouteB() {
   );
 }
 
+function useFireRequestOnTabClose(shouldPrompt: boolean) {
+  useEffect(() => {
+    function onBeforeUnload(e: BeforeUnloadEvent) {
+      fetch("/api/closing", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reason: "beforeunload", at: Date.now() }),
+      });
+      if (shouldPrompt) {
+        // Triggers the browser's native "Leave site?" dialog.
+        // The message is browser-controlled and cannot be customised.
+        e.preventDefault();
+        e.returnValue = ""; // legacy, still required by some browsers
+      }
+    }
+    // `beforeunload` fires just before the page is unloaded (tab close,
+    // reload, or navigation away). Doesn't fire on mobile Safari, and
+    // requires prior user interaction in modern Chrome.
+    window.addEventListener("beforeunload", onBeforeUnload);
+    return () => window.removeEventListener("beforeunload", onBeforeUnload);
+  }, [shouldPrompt]);
+}
+
 function Layout() {
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  useFireRequestOnTabClose(hasUnsavedChanges);
+
+  // `useBlocker` intercepts in-app navigation only — it has no effect on
+  // tab close or full page reload (use `beforeunload` for those).
+  const blocker = useBlocker(
+    ({ currentLocation, nextLocation }) =>
+      hasUnsavedChanges &&
+      currentLocation.pathname !== nextLocation.pathname,
+  );
+
   return (
     <div>
       <h1>Before-leave request demo</h1>
@@ -55,13 +90,38 @@ function Layout() {
         <Link to="/a">Go to A</Link>
         <Link to="/b">Go to B</Link>
       </nav>
+      <label style={{ display: "block", marginTop: 12 }}>
+        <input
+          type="checkbox"
+          checked={hasUnsavedChanges}
+          onChange={(e) => setHasUnsavedChanges(e.target.checked)}
+        />{" "}
+        I have unsaved changes (block in-app navigation)
+      </label>
       <hr />
+      {blocker.state === "blocked" && (
+        <div
+          style={{
+            padding: 12,
+            border: "1px solid #c33",
+            marginBottom: 12,
+          }}
+          role="alertdialog"
+          aria-labelledby="blocker-title"
+        >
+          <p id="blocker-title" style={{ margin: 0, marginBottom: 8 }}>
+            You have unsaved changes. Leave anyway?
+          </p>
+          <button onClick={() => blocker.proceed()}>Leave</button>{" "}
+          <button onClick={() => blocker.reset()}>Stay</button>
+        </div>
+      )}
       <Outlet />
       <hr />
       <p>
         Open DevTools → Network and watch <code>POST /api/leave</code> fire each
-        time you switch routes. The request is handled by MSW (see the service
-        worker console log).
+        time you switch routes, and <code>POST /api/closing</code> fire when you
+        close the tab or navigate away. Both are logged by the Node server.
       </p>
     </div>
   );
