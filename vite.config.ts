@@ -13,4 +13,9 @@ export default defineConfig({
   test: {
     environment: "happy-dom",
   },
+  server: {
+    proxy: {
+      "/api": "http://localhost:8787",
+    },
+  },
 });

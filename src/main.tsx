@@ -1,24 +1,4 @@
 import ReactDOM from "react-dom/client";
-// import App from "./App.tsx";
-// import App from "./AppLazyQuery.tsx";
-// import App from "./AppLazyData.tsx";
-// import App from "./App2.tsx";
-// import App from "./AppParallelQueries.tsx";
-import App from "./AppRefetchQueries.tsx";
-// import App from "./App3.tsx";
-// import App from "./App4.tsx";
-// import App from "./SubRouter.tsx";
-// import App from "./AppPromises.tsx";
-// import App from "./AppNormalUI.tsx";
-// import App from "./AppOptimisticUI.tsx";
-// import App from "./AppOptimisticUIWithError.tsx";
-// import App from "./AppStream.tsx";
-// import { worker } from "./mocks/browser.ts";
+import App from "./AppBeforeLeave.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(<App />);
-
-// worker.start().then(async () => {
-//   // Wait 1s
-//   await new Promise((resolve) => setTimeout(resolve, 1000));
-//   ReactDOM.createRoot(document.getElementById("root")!).render(<App />);
-// });
