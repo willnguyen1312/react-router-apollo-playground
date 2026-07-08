@@ -1,4 +1,7 @@
 import ReactDOM from "react-dom/client";
-import App from "./AppCachePersist.tsx";
+import App from "./AppFetchPolicy.tsx";
+import { worker } from "./mocks/browser.ts";
 
-ReactDOM.createRoot(document.getElementById("root")!).render(<App />);
+worker.start({ onUnhandledRequest: "bypass" }).then(() => {
+  ReactDOM.createRoot(document.getElementById("root")!).render(<App />);
+});

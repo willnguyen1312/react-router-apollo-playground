@@ -110,6 +110,7 @@ export default function App() {
   const reload = useCallback(() => window.location.reload(), []);
 
   if (!client) {
+    console.log("Initializing Apollo + cache-persist…");
     return <p>Initialising Apollo + cache-persist…</p>;
   }
 

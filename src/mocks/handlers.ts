@@ -33,6 +33,16 @@ export const handlers = [
     });
   }),
 
+  graphql.query("RandomNumber", async () => {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    return HttpResponse.json({
+      data: {
+        randomNumber: Math.floor(Math.random() * 1_000_000),
+      },
+    });
+  }),
+
   graphql.query("Error", () => {
     return HttpResponse.json(
       {
